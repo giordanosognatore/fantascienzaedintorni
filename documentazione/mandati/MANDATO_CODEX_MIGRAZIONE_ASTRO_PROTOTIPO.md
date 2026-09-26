@@ -1,9 +1,9 @@
 # MANDATO CODEX — Migrazione ad Astro e prototipo editoriale di Passione Fantascienza
 
-**Repository:** `giordanosognatore/passionefantascienza`  
-**Base canonica:** ultimo `origin/main`  
-**Branch di lavoro richiesto:** `feat/astro-blog-prototype`  
-**Sito attuale:** `https://giordanosognatore.github.io/passionefantascienza/`  
+**Repository:** `giordanosognatore/passionefantascienza`
+**Base canonica:** ultimo `origin/main`
+**Branch di lavoro richiesto:** `feat/astro-blog-prototype`
+**Sito attuale:** `https://giordanosognatore.github.io/passionefantascienza/`
 **Lingua del sito:** italiano
 
 ## 1. Contesto
