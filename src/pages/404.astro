@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../utils/urls';
+---
+
+<BaseLayout
+  title="Pagina non trovata"
+  description="La coordinata richiesta non esiste in Passione Fantascienza."
+  noindex
+>
+  <section class="not-found wrap">
+    <p class="eyebrow">Errore 404</p>
+    <span class="not-found-code" aria-hidden="true">404</span>
+    <h1>Questa coordinata non esiste.</h1>
+    <p>La rotta potrebbe essere cambiata, oppure il contenuto non è ancora stato pubblicato.</p>
+    <a class="button" href={withBase()}>Torna alla homepage</a>
+  </section>
+</BaseLayout>

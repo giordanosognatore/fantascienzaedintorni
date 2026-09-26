@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { authorUrl } from '../utils/urls';
+
+interface Props {
+  author: CollectionEntry<'authors'>;
+}
+
+const { author } = Astro.props;
+const initials = author.data.name
+  .split(' ')
+  .map((part) => part[0])
+  .join('')
+  .slice(0, 2);
+---
+
+<article class="author-card">
+  <div class="author-avatar" aria-hidden="true">{initials}</div>
+  <div>
+    <p class="eyebrow">Autore</p>
+    <h2><a href={authorUrl(author.data.slug)}>{author.data.name}</a></h2>
+    <p>{author.data.bio}</p>
+    <a class="read-link" href={authorUrl(author.data.slug)}>Vai al profilo <span aria-hidden="true">→</span></a>
+  </div>
+</article>

@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TelegramCTA from '../components/TelegramCTA.astro';
+---
+
+<BaseLayout
+  title="Community"
+  description="Passione Fantascienza nasce su Telegram: scopri come la conversazione diventa contenuto editoriale pubblico e permanente."
+>
+  <header class="page-header wrap page-header-wide">
+    <p class="eyebrow">Il cuore del progetto</p>
+    <h1>La community non è il pubblico.<br /><span>È il punto di partenza.</span></h1>
+    <p>
+      Telegram resta il luogo del dialogo quotidiano. Il sito seleziona, approfondisce e conserva le idee che meritano una vita più lunga.
+    </p>
+  </header>
+
+  <section class="wrap section-block" aria-labelledby="cycle-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Un ciclo aperto</p>
+        <h2 id="cycle-title">Dalla conversazione all'archivio, e ritorno</h2>
+      </div>
+    </div>
+    <ol class="process-list">
+      <li><span>01</span><div><strong>Conversazione</strong><p>Nel gruppo emerge una domanda, una segnalazione o un confronto interessante.</p></div></li>
+      <li><span>02</span><div><strong>Selezione</strong><p>Si riconoscono i temi che meritano di essere conservati e sviluppati.</p></div></li>
+      <li><span>03</span><div><strong>Cura</strong><p>Il tema diventa un articolo autonomo, ordinato e corredato da fonti quando necessarie.</p></div></li>
+      <li><span>04</span><div><strong>Pubblicazione</strong><p>Il contenuto entra nell'archivio ed è accessibile anche fuori da Telegram.</p></div></li>
+      <li><span>05</span><div><strong>Nuovo dialogo</strong><p>L'articolo torna nel gruppo e apre altre domande, letture e prospettive.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="community-note">
+    <div class="wrap community-note-grid">
+      <div>
+        <p class="eyebrow">Rubrica futura</p>
+        <h2>Questa settimana in Passione Fantascienza</h2>
+      </div>
+      <div>
+        <p>
+          Una selezione periodica potrà raccontare i temi più vivi del gruppo con contesto e collegamenti. Gli interventi degli utenti non saranno ripubblicati in modo identificabile o sensibile senza criterio e autorizzazione.
+        </p>
+        <p class="prototype-label">Sezione predisposta nel prototipo · contenuti reali in arrivo</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section-block section-last">
+    <TelegramCTA />
+  </section>
+</BaseLayout>

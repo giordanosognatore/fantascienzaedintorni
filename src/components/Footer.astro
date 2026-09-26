@@ -1,0 +1,20 @@
+---
+import { withBase } from '../utils/urls';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <a class="footer-brand" href={withBase()}>Passione Fantascienza</a>
+      <p>La conversazione continua. Il sito le dà memoria.</p>
+    </div>
+    <nav aria-label="Link nel piè di pagina">
+      <a href={withBase('blog/')}>Magazine</a>
+      <a href={withBase('community/')}>Community</a>
+      <a href={withBase('risorse/')}>Risorse</a>
+      <a href={withBase('rss.xml')}>RSS</a>
+    </nav>
+    <p class="footer-meta">© {year} Passione Fantascienza<br />Contenuti versionati e pubblicati staticamente.</p>
+  </div>
+</footer>

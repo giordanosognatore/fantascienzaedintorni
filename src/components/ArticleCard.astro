@@ -1,0 +1,29 @@
+---
+import { getEntry } from 'astro:content';
+import type { BlogEntry } from '../utils/content';
+import { formatDate } from '../utils/content';
+import { authorUrl, blogUrl } from '../utils/urls';
+
+interface Props {
+  post: BlogEntry;
+  compact?: boolean;
+}
+
+const { post, compact = false } = Astro.props;
+const author = await getEntry(post.data.author);
+---
+
+<article class:list={['article-card', { 'article-card-compact': compact }]}>
+  <div class="article-card-topline">
+    <span class="category-label">{post.data.category}</span>
+    <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+  </div>
+  <h3><a href={blogUrl(post.id)}>{post.data.title}</a></h3>
+  <p>{post.data.description}</p>
+  <div class="article-card-footer">
+    {author && <a class="author-link" href={authorUrl(author.data.slug)}>Di {author.data.name}</a>}
+    <a class="read-link" href={blogUrl(post.id)} aria-label={`Leggi ${post.data.title}`}>
+      Leggi <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</article>

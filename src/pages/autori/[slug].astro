@@ -1,0 +1,54 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { publishedPosts } from '../../utils/content';
+
+export async function getStaticPaths() {
+  const authors = await getCollection('authors');
+  return authors.map((author) => ({
+    params: { slug: author.data.slug },
+    props: { author },
+  }));
+}
+
+const { author } = Astro.props;
+const { Content } = await render(author);
+const posts = publishedPosts(await getCollection('blog')).filter(
+  (post) => post.data.author.id === author.id,
+);
+const initials = author.data.name
+  .split(' ')
+  .map((part) => part[0])
+  .join('')
+  .slice(0, 2);
+---
+
+<BaseLayout title={author.data.name} description={author.data.bio} type="profile">
+  <header class="author-profile wrap">
+    <div class="author-avatar author-avatar-large" aria-hidden="true">{initials}</div>
+    <div>
+      <p class="eyebrow">Profilo autore</p>
+      <h1>{author.data.name}</h1>
+      <p class="author-bio">{author.data.bio}</p>
+      <div class="profile-content prose"><Content /></div>
+      <div class="profile-links">
+        {author.data.website && <a href={author.data.website} target="_blank" rel="noreferrer">Sito web ↗</a>}
+        {author.data.email && <a href={`mailto:${author.data.email}`}>Scrivi all'autore</a>}
+      </div>
+    </div>
+  </header>
+  <section class="wrap section-block" aria-labelledby="author-posts-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Archivio della firma</p>
+        <h2 id="author-posts-title">Articoli</h2>
+      </div>
+    </div>
+    {posts.length > 0 ? (
+      <div class="article-grid">{posts.map((post) => <ArticleCard post={post} compact />)}</div>
+    ) : (
+      <p class="archive-empty">Nessun articolo pubblicato per ora.</p>
+    )}
+  </section>
+</BaseLayout>

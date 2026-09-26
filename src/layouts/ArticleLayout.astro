@@ -1,0 +1,75 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import TelegramCTA from '../components/TelegramCTA.astro';
+import type { BlogEntry } from '../utils/content';
+import { formatDate } from '../utils/content';
+import { authorUrl, categoryId, withBase } from '../utils/urls';
+
+interface Props {
+  post: BlogEntry;
+}
+
+const { post } = Astro.props;
+const author = await getEntry(post.data.author);
+const coverUrl = post.data.cover ? withBase(post.data.cover) : undefined;
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  image={coverUrl}
+  type="article"
+>
+  <article class="article-page">
+    <header class="article-header wrap reading-width">
+      <nav class="breadcrumbs" aria-label="Percorso di navigazione">
+        <a href={withBase()}>Home</a>
+        <span aria-hidden="true">/</span>
+        <a href={withBase('blog/')}>Magazine</a>
+        <span aria-hidden="true">/</span>
+        <a href={`${withBase('blog/')}#${categoryId(post.data.category)}`}>{post.data.category}</a>
+      </nav>
+      <p class="eyebrow">{post.data.category}</p>
+      <h1>{post.data.title}</h1>
+      <p class="article-deck">{post.data.description}</p>
+      <div class="article-byline">
+        {author && <a href={authorUrl(author.data.slug)}>{author.data.name}</a>}
+        <span aria-hidden="true">·</span>
+        <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+        {post.data.updatedDate && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>Aggiornato il {formatDate(post.data.updatedDate)}</span>
+          </>
+        )}
+      </div>
+    </header>
+    {post.data.cover && (
+      <figure class="article-cover wrap">
+        <img src={coverUrl} alt={post.data.coverAlt ?? ''} />
+      </figure>
+    )}
+    <div class="prose wrap reading-width">
+      <slot />
+    </div>
+    <footer class="article-footer wrap reading-width">
+      <div class="tag-list" aria-label="Tag dell'articolo">
+        {post.data.tags.map((tag) => <span>#{tag}</span>)}
+      </div>
+      {author && (
+        <div class="article-author-note">
+          <span class="author-avatar author-avatar-small" aria-hidden="true">GS</span>
+          <div>
+            <strong>{author.data.name}</strong>
+            <p>{author.data.bio}</p>
+            <a class="read-link" href={authorUrl(author.data.slug)}>Altri contenuti dell'autore <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      )}
+    </footer>
+  </article>
+  <section class="wrap section-block">
+    <TelegramCTA compact />
+  </section>
+</BaseLayout>

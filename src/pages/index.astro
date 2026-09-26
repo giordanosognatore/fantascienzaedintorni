@@ -1,0 +1,161 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import HeroArticle from '../components/HeroArticle.astro';
+import TelegramCTA from '../components/TelegramCTA.astro';
+import AuthorCard from '../components/AuthorCard.astro';
+import { publishedPosts } from '../utils/content';
+import { categoryId, withBase } from '../utils/urls';
+
+const posts = publishedPosts(await getCollection('blog'));
+const authors = await getCollection('authors');
+const featured = posts.find((post) => post.data.featured);
+const latest = posts.filter((post) => post.id !== featured?.id).slice(0, 3);
+const primaryAuthor = authors.find((author) => author.data.slug === 'giordano-sognatore') ?? authors[0];
+
+const topicEntrances = [
+  {
+    title: 'Libri',
+    label: 'Narrazioni',
+    description: 'Recensioni, classici, nuove voci e percorsi di lettura.',
+    category: 'Libri',
+  },
+  {
+    title: 'Cinema & TV',
+    label: 'Visioni',
+    description: 'Film, serie e adattamenti che immaginano altri mondi.',
+    category: 'Cinema',
+  },
+  {
+    title: 'Approfondimenti',
+    label: 'Idee',
+    description: 'Scienza, tecnologia e domande che attraversano la fantascienza.',
+    category: 'Approfondimenti',
+  },
+  {
+    title: 'Community',
+    label: 'Conversazioni',
+    description: 'I temi e le iniziative che nascono nel gruppo Telegram.',
+    category: 'Community',
+  },
+];
+---
+
+<BaseLayout
+  title="Passione Fantascienza"
+  description="Magazine e community italiana dedicata a libri, cinema, serie TV, scienza e immaginari del futuro."
+>
+  <section class="home-hero wrap">
+    <div class="home-hero-copy">
+      <p class="eyebrow">Magazine · Community · Archivio</p>
+      <h1>La fantascienza è una <span>conversazione</span>.</h1>
+      <p class="hero-lead">
+        Idee, storie e futuri possibili. Il meglio delle discussioni di Passione Fantascienza diventa un archivio pubblico da leggere, esplorare e riportare nella community.
+      </p>
+      <div class="hero-actions">
+        <a class="button" href="https://t.me/fantascienza1" target="_blank" rel="noreferrer">
+          Entra nel gruppo Telegram <span aria-hidden="true">↗</span>
+        </a>
+        <a class="button button-secondary" href={withBase('blog/')}>Esplora il magazine</a>
+      </div>
+    </div>
+    <div class="hero-manifesto" aria-label="Manifesto di Passione Fantascienza">
+      <span class="manifesto-number">01</span>
+      <p>La conversazione accende le idee.</p>
+      <span class="manifesto-line"></span>
+      <p>La cura editoriale le rende durature.</p>
+      <span class="manifesto-line"></span>
+      <p>L'archivio le apre a nuovi lettori.</p>
+    </div>
+  </section>
+
+  <section class="wrap section-block" aria-labelledby="evidenza-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Primo segnale</p>
+        <h2 id="evidenza-title">In evidenza</h2>
+      </div>
+      <a class="section-link" href={withBase('blog/')}>Tutti gli articoli <span aria-hidden="true">→</span></a>
+    </div>
+    {featured ? (
+      <HeroArticle post={featured} />
+    ) : (
+      <div class="empty-state">
+        <p>Il primo articolo è in preparazione.</p>
+        <a class="read-link" href={withBase('community/')}>Nel frattempo, scopri la community <span aria-hidden="true">→</span></a>
+      </div>
+    )}
+  </section>
+
+  <section class="wrap section-block" aria-labelledby="latest-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Ultime coordinate</p>
+        <h2 id="latest-title">Ultimi articoli</h2>
+      </div>
+    </div>
+    {latest.length > 0 ? (
+      <div class="article-grid">
+        {latest.map((post) => <ArticleCard post={post} />)}
+      </div>
+    ) : (
+      <div class="empty-state empty-state-inline">
+        <p>Nuovi articoli arriveranno qui. Il prototipo è pronto ad accoglierli.</p>
+      </div>
+    )}
+  </section>
+
+  <section class="community-pulse">
+    <div class="wrap community-pulse-grid">
+      <div>
+        <p class="eyebrow">Dalla community</p>
+        <h2>Questa settimana in<br />Passione Fantascienza</h2>
+      </div>
+      <div class="community-pulse-copy">
+        <p class="pulse-status">Rubrica in preparazione</p>
+        <p>
+          Le conversazioni più interessanti del gruppo potranno diventare articoli autonomi, contestualizzati e verificati. Non trascrizioni della chat, ma percorsi da conservare e condividere.
+        </p>
+        <a class="read-link" href={withBase('community/')}>Come funziona il ponte con Telegram <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section-block" aria-labelledby="routes-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Rotte di esplorazione</p>
+        <h2 id="routes-title">Scegli da dove partire</h2>
+      </div>
+    </div>
+    <div class="topic-grid">
+      {topicEntrances.map((topic, index) => (
+        <a class="topic-card" href={`${withBase('blog/')}#${categoryId(topic.category)}`}>
+          <span class="topic-index">0{index + 1}</span>
+          <span class="eyebrow">{topic.label}</span>
+          <strong>{topic.title}</strong>
+          <span>{topic.description}</span>
+          <span class="topic-arrow" aria-hidden="true">↗</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  {primaryAuthor && (
+    <section class="wrap section-block" aria-labelledby="voices-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Voci dal progetto</p>
+          <h2 id="voices-title">Gli autori</h2>
+        </div>
+        <a class="section-link" href={withBase('autori/')}>Tutti gli autori <span aria-hidden="true">→</span></a>
+      </div>
+      <AuthorCard author={primaryAuthor} />
+    </section>
+  )}
+
+  <section class="wrap section-block section-last">
+    <TelegramCTA />
+  </section>
+</BaseLayout>

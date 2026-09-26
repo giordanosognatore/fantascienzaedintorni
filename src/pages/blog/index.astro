@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { publishedPosts } from '../../utils/content';
+import { categories } from '../../utils/taxonomy';
+import { categoryId } from '../../utils/urls';
+
+const posts = publishedPosts(await getCollection('blog'));
+---
+
+<BaseLayout
+  title="Magazine"
+  description="Archivio degli articoli di Passione Fantascienza: libri, cinema, serie TV, community e approfondimenti."
+>
+  <header class="page-header wrap">
+    <p class="eyebrow">Archivio editoriale</p>
+    <h1>Magazine</h1>
+    <p>Articoli, percorsi e domande sui futuri che leggiamo, guardiamo e immaginiamo insieme.</p>
+  </header>
+
+  <nav class="category-nav wrap" aria-label="Categorie del magazine">
+    <span>Vai a</span>
+    {categories.map((category) => <a href={`#${categoryId(category)}`}>{category}</a>)}
+  </nav>
+
+  <div class="wrap archive-sections">
+    {categories.map((category) => {
+      const categoryPosts = posts.filter((post) => post.data.category === category);
+      return (
+        <section id={categoryId(category)} class="archive-section" aria-labelledby={`${categoryId(category)}-title`}>
+          <div class="archive-heading">
+            <h2 id={`${categoryId(category)}-title`}>{category}</h2>
+            <span>{categoryPosts.length} {categoryPosts.length === 1 ? 'articolo' : 'articoli'}</span>
+          </div>
+          {categoryPosts.length > 0 ? (
+            <div class="article-grid">
+              {categoryPosts.map((post) => <ArticleCard post={post} compact />)}
+            </div>
+          ) : (
+            <p class="archive-empty">Sezione pronta: i primi contenuti arriveranno qui.</p>
+          )}
+        </section>
+      );
+    })}
+  </div>
+</BaseLayout>

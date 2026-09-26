@@ -1,0 +1,34 @@
+---
+import { getEntry } from 'astro:content';
+import type { BlogEntry } from '../utils/content';
+import { formatDate } from '../utils/content';
+import { authorUrl, blogUrl } from '../utils/urls';
+
+interface Props {
+  post: BlogEntry;
+}
+
+const { post } = Astro.props;
+const author = await getEntry(post.data.author);
+---
+
+<article class="hero-article">
+  <div class="hero-article-copy">
+    <div class="article-card-topline">
+      <span class="category-label">In evidenza · {post.data.category}</span>
+      <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+    </div>
+    <h2><a href={blogUrl(post.id)}>{post.data.title}</a></h2>
+    <p>{post.data.description}</p>
+    <div class="hero-article-actions">
+      <a class="button" href={blogUrl(post.id)}>Leggi l'articolo <span aria-hidden="true">→</span></a>
+      {author && <a class="author-link" href={authorUrl(author.data.slug)}>Di {author.data.name}</a>}
+    </div>
+  </div>
+  <div class="signal-visual" aria-hidden="true">
+    <span class="signal-orbit signal-orbit-one"></span>
+    <span class="signal-orbit signal-orbit-two"></span>
+    <span class="signal-core"></span>
+    <span class="signal-caption">PF · 01</span>
+  </div>
+</article>

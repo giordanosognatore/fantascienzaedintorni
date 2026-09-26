@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AuthorCard from '../../components/AuthorCard.astro';
+
+const authors = (await getCollection('authors')).sort((a, b) => a.data.name.localeCompare(b.data.name, 'it'));
+---
+
+<BaseLayout
+  title="Autori"
+  description="Le persone che firmano e curano i contenuti di Passione Fantascienza."
+>
+  <header class="page-header wrap">
+    <p class="eyebrow">Le firme</p>
+    <h1>Autori</h1>
+    <p>Voci, competenze e prospettive che alimentano la conversazione.</p>
+  </header>
+  <section class="wrap directory-list" aria-label="Elenco autori">
+    {authors.map((author) => <AuthorCard author={author} />)}
+  </section>
+</BaseLayout>
