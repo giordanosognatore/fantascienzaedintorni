@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://giordanosognatore.github.io/passionefantascienza/sitemap-index.xml

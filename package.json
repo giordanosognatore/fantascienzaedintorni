@@ -1,5 +1,5 @@
 {
-  "name": "passione-fantascienza",
+  "name": "fantascienza-edintorni",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -21,6 +21,6 @@
     "typescript": "6.0.3"
   },
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.0.0"
   }
 }
