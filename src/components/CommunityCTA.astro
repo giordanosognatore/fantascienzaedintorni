@@ -1,0 +1,22 @@
+---
+import { withBase } from '../utils/urls';
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<aside class:list={['community-cta', { 'community-cta-compact': compact }]} aria-labelledby={compact ? 'community-cta-title-compact' : 'community-cta-title'}>
+  <div>
+    <p class="eyebrow">Uno spazio in costruzione</p>
+    <h2 id={compact ? 'community-cta-title-compact' : 'community-cta-title'}>
+      Le idee crescono<br />quando vengono condivise.
+    </h2>
+    <p>La community di Fantascienza e dintorni è in preparazione. I suoi canali saranno annunciati qui dopo la verifica.</p>
+  </div>
+  <a class="button" href={withBase('community/')}>
+    Scopri il progetto <span aria-hidden="true">→</span>
+  </a>
+</aside>

@@ -1,6 +1,7 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 import { blogUrl, withBase } from '../utils/urls';
+import { siteName } from '../../site.config.mjs';
 
 export async function GET(context) {
   const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
@@ -8,8 +9,8 @@ export async function GET(context) {
   );
 
   return rss({
-    title: 'Passione Fantascienza',
-    description: 'Articoli su libri, cinema, serie TV, scienza e immaginari del futuro.',
+    title: siteName,
+    description: 'Articoli su libri, cinema, serie TV, videogames, scienza e immaginari del futuro.',
     site: new URL(withBase(), context.site),
     items: posts.map((post) => ({
       title: post.data.title,
