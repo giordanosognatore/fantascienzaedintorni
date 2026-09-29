@@ -1,7 +1,7 @@
 ---
 name: Giordano Sognatore
 slug: giordano-sognatore
-bio: Autore e collaboratore tecnico di Fantascienza e dintorni.
+bio: Autore e collaboratore tecnico di Passione Fantascienza.
 email: giordano.sognatore@gmail.com
 ---
 

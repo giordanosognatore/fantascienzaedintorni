@@ -1,7 +1,7 @@
 ---
 import { getEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
-import CommunityCTA from '../components/CommunityCTA.astro';
+import TelegramCTA from '../components/TelegramCTA.astro';
 import type { BlogEntry } from '../utils/content';
 import { formatDate } from '../utils/content';
 import { authorUrl, categoryId, withBase } from '../utils/urls';
@@ -70,6 +70,6 @@ const coverUrl = post.data.cover ? withBase(post.data.cover) : undefined;
     </footer>
   </article>
   <section class="wrap section-block">
-    <CommunityCTA compact />
+    <TelegramCTA compact />
   </section>
 </BaseLayout>

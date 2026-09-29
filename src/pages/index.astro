@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import HeroArticle from '../components/HeroArticle.astro';
-import CommunityCTA from '../components/CommunityCTA.astro';
+import TelegramCTA from '../components/TelegramCTA.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 import { publishedPosts } from '../utils/content';
 import { categoryId, withBase } from '../utils/urls';
@@ -22,51 +22,51 @@ const topicEntrances = [
     category: 'Libri',
   },
   {
-    title: 'Cinema',
+    title: 'Cinema & TV',
     label: 'Visioni',
-    description: 'Film, autori e adattamenti che immaginano altri mondi.',
+    description: 'Film, serie e adattamenti che immaginano altri mondi.',
     category: 'Cinema',
   },
   {
-    title: 'Serie TV',
-    label: 'Universi',
-    description: 'Storie seriali, episodi e mondi che crescono nel tempo.',
-    category: 'Serie TV',
+    title: 'Approfondimenti',
+    label: 'Idee',
+    description: 'Scienza, tecnologia e domande che attraversano la fantascienza.',
+    category: 'Approfondimenti',
   },
   {
-    title: 'Videogames',
-    label: 'Esperienze',
-    description: 'Mondi interattivi, game design e futuri da esplorare.',
-    category: 'Videogames',
+    title: 'Community',
+    label: 'Conversazioni',
+    description: 'I temi e le iniziative che nascono nel gruppo Telegram.',
+    category: 'Community',
   },
 ];
 ---
 
 <BaseLayout
-  title="Fantascienza e dintorni"
-  description="Magazine indipendente dedicato a libri, cinema, serie TV, videogames, scienza e immaginari del futuro."
+  title="Passione Fantascienza"
+  description="Magazine e community italiana dedicata a libri, cinema, serie TV, scienza e immaginari del futuro."
 >
   <section class="home-hero wrap">
     <div class="home-hero-copy">
       <p class="eyebrow">Magazine · Community · Archivio</p>
       <h1>La fantascienza è una <span>conversazione</span>.</h1>
       <p class="hero-lead">
-        Storie, idee e futuri possibili da leggere, guardare e attraversare. Fantascienza e dintorni è uno spazio editoriale indipendente aperto alle molte forme dell'immaginario.
+        Idee, storie e futuri possibili. Il meglio delle discussioni di Passione Fantascienza diventa un archivio pubblico da leggere, esplorare e riportare nella community.
       </p>
       <div class="hero-actions">
-        <a class="button" href={withBase('blog/')}>
-          Esplora il magazine <span aria-hidden="true">→</span>
+        <a class="button" href="https://t.me/fantascienza1" target="_blank" rel="noreferrer">
+          Entra nel gruppo Telegram <span aria-hidden="true">↗</span>
         </a>
-        <a class="button button-secondary" href={withBase('community/')}>Scopri il progetto</a>
+        <a class="button button-secondary" href={withBase('blog/')}>Esplora il magazine</a>
       </div>
     </div>
-    <div class="hero-manifesto" aria-label="Manifesto di Fantascienza e dintorni">
+    <div class="hero-manifesto" aria-label="Manifesto di Passione Fantascienza">
       <span class="manifesto-number">01</span>
-      <p>Le storie accendono le idee.</p>
+      <p>La conversazione accende le idee.</p>
       <span class="manifesto-line"></span>
-      <p>La cura editoriale crea percorsi.</p>
+      <p>La cura editoriale le rende durature.</p>
       <span class="manifesto-line"></span>
-      <p>L'archivio li apre a nuovi lettori.</p>
+      <p>L'archivio le apre a nuovi lettori.</p>
     </div>
   </section>
 
@@ -83,7 +83,7 @@ const topicEntrances = [
     ) : (
       <div class="empty-state">
         <p>Il primo articolo è in preparazione.</p>
-        <a class="read-link" href={withBase('blog/')}>Esplora le sezioni del magazine <span aria-hidden="true">→</span></a>
+        <a class="read-link" href={withBase('community/')}>Nel frattempo, scopri la community <span aria-hidden="true">→</span></a>
       </div>
     )}
   </section>
@@ -101,7 +101,7 @@ const topicEntrances = [
       </div>
     ) : (
       <div class="empty-state empty-state-inline">
-        <p>Nuovi articoli arriveranno qui. Il magazine è pronto ad accoglierli.</p>
+        <p>Nuovi articoli arriveranno qui. Il prototipo è pronto ad accoglierli.</p>
       </div>
     )}
   </section>
@@ -109,15 +109,15 @@ const topicEntrances = [
   <section class="community-pulse">
     <div class="wrap community-pulse-grid">
       <div>
-        <p class="eyebrow">Dietro le quinte</p>
-        <h2>Una community<br />da costruire insieme</h2>
+        <p class="eyebrow">Dalla community</p>
+        <h2>Questa settimana in<br />Passione Fantascienza</h2>
       </div>
       <div class="community-pulse-copy">
-        <p class="pulse-status">Spazio in preparazione</p>
+        <p class="pulse-status">Rubrica in preparazione</p>
         <p>
-          Il progetto crescerà anche attraverso occasioni di confronto tra lettrici, lettori, spettatori e giocatori. I canali ufficiali saranno annunciati soltanto quando saranno pronti e verificati.
+          Le conversazioni più interessanti del gruppo potranno diventare articoli autonomi, contestualizzati e verificati. Non trascrizioni della chat, ma percorsi da conservare e condividere.
         </p>
-        <a class="read-link" href={withBase('community/')}>Scopri la visione della community <span aria-hidden="true">→</span></a>
+        <a class="read-link" href={withBase('community/')}>Come funziona il ponte con Telegram <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
@@ -156,6 +156,6 @@ const topicEntrances = [
   )}
 
   <section class="wrap section-block section-last">
-    <CommunityCTA />
+    <TelegramCTA />
   </section>
 </BaseLayout>

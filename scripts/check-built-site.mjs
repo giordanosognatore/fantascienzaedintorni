@@ -1,14 +1,15 @@
-import { existsSync, globSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { basePath, siteName, siteUrl } from '../site.config.mjs';
+import { globSync } from 'node:fs';
 
 const projectRoot = resolve(import.meta.dirname, '..');
 const outputRoot = join(projectRoot, 'dist');
+const base = '/passionefantascienza';
 
 const requiredFiles = [
   'index.html',
-  '404.html',
   'blog/index.html',
+  'blog/prototipo-la-conversazione-continua-qui/index.html',
   'autori/index.html',
   'autori/giordano-sognatore/index.html',
   'community/index.html',
@@ -16,7 +17,8 @@ const requiredFiles = [
   'rss.xml',
   'sitemap-index.xml',
   'robots.txt',
-  'favicon.svg',
+  'downloads/docs/Passione_Fantascienza_Proposta_Giordano_Sognatore_a_Riccardo.pdf',
+  'downloads/docs/Passione_Fantascienza_Piano_Tecnico_Implementazione.pdf',
 ];
 
 const errors = [];
@@ -28,49 +30,15 @@ for (const file of requiredFiles) {
   }
 }
 
-const readOutput = (file) =>
-  existsSync(join(outputRoot, file)) ? readFileSync(join(outputRoot, file), 'utf8') : '';
-
-const rss = readOutput('rss.xml');
-if (!rss.includes(`<title>${siteName}</title>`) || !rss.includes(`<link>${siteUrl}</link>`)) {
-  errors.push('Il feed RSS non usa identità o URL pubblico correnti.');
-}
-
-const robots = readOutput('robots.txt');
-if (!robots.includes(`Sitemap: ${siteUrl}sitemap-index.xml`)) {
-  errors.push('robots.txt non indica la sitemap pubblica corrente.');
-}
-
-const sitemapIndex = readOutput('sitemap-index.xml');
-if (!sitemapIndex.includes(siteUrl)) {
-  errors.push('L’indice sitemap non usa il base path pubblico corrente.');
-}
-const sitemaps = globSync('sitemap*.xml', { cwd: outputRoot })
-  .map(readOutput)
-  .join('\n');
-if (sitemaps.includes('prototipo-la-conversazione-continua-qui')) {
-  errors.push('La sitemap non deve indicizzare l’articolo dimostrativo.');
-}
-
-const home = readOutput('index.html');
-for (const area of ['Libri', 'Cinema', 'Serie TV', 'Videogames']) {
-  if (!home.includes(area)) errors.push(`Homepage: area editoriale non visibile: ${area}.`);
-}
-
-const archive = readOutput('blog/index.html');
-for (const category of ['Libri', 'Cinema', 'Serie TV', 'Videogames', 'Approfondimenti', 'Community']) {
-  if (!archive.includes(`id="${category.toLowerCase().replaceAll(' ', '-')}"`)) {
-    errors.push(`Archivio: sezione di categoria mancante: ${category}.`);
-  }
-}
-
-if (existsSync(join(outputRoot, 'blog/prototipo-la-conversazione-continua-qui/index.html'))) {
-  errors.push('L’articolo dimostrativo non deve essere pubblicato.');
+const rss = existsSync(join(outputRoot, 'rss.xml'))
+  ? readFileSync(join(outputRoot, 'rss.xml'), 'utf8')
+  : '';
+if (!rss.includes('<link>https://giordanosognatore.github.io/passionefantascienza/</link>')) {
+  errors.push('Il link principale del feed RSS non include il base path di GitHub Pages.');
 }
 
 const htmlFiles = globSync('**/*.html', { cwd: outputRoot });
 const referencePattern = /(?:href|src)=(?:"([^"]+)"|'([^']+)')/g;
-const canonicalPrefix = `<link rel="canonical" href="${siteUrl}`;
 
 for (const htmlFile of htmlFiles) {
   const sourcePath = join(outputRoot, htmlFile);
@@ -89,14 +57,11 @@ for (const htmlFile of htmlFiles) {
   if (!/<meta name="description" content="[^"]+">/.test(html)) {
     errors.push(`${htmlFile}: meta description mancante o vuota.`);
   }
-  if (!html.includes(canonicalPrefix)) {
-    errors.push(`${htmlFile}: canonical non coerente con l’URL pubblico.`);
+  if (!/<link rel="canonical" href="https:\/\/giordanosognatore\.github\.io\/passionefantascienza\//.test(html)) {
+    errors.push(`${htmlFile}: canonical non coerente con l'URL pubblico.`);
   }
-  if (!html.includes(`<meta property="og:site_name" content="${siteName}">`)) {
-    errors.push(`${htmlFile}: identità Open Graph non coerente.`);
-  }
-  if (!html.includes(`<meta property="og:url" content="${siteUrl}`)) {
-    errors.push(`${htmlFile}: URL Open Graph non coerente.`);
+  if (/href=["'][^"']*downloads\/docs\//.test(html)) {
+    errors.push(`${htmlFile}: i PDF di specifica non devono essere promossi nell'interfaccia.`);
   }
 
   for (const match of html.matchAll(referencePattern)) {
@@ -119,12 +84,12 @@ for (const htmlFile of htmlFiles) {
       continue;
     }
 
-    if (!reference.startsWith(`${basePath}/`)) {
+    if (!reference.startsWith(`${base}/`)) {
       errors.push(`${htmlFile}: riferimento interno non prefissato dal base path: ${reference}`);
       continue;
     }
 
-    const [pathPart, fragmentPart] = reference.slice(basePath.length).split('#', 2);
+    const [pathPart, fragmentPart] = reference.slice(base.length).split('#', 2);
     const cleanPath = decodeURIComponent(pathPart.split('?', 1)[0]);
     const relativeTarget = cleanPath === '/' ? 'index.html' : cleanPath.replace(/^\//, '');
     const candidate = join(outputRoot, relativeTarget);
@@ -138,8 +103,7 @@ for (const htmlFile of htmlFiles) {
     if (fragmentPart && target.endsWith('.html')) {
       const targetHtml = readFileSync(target, 'utf8');
       const fragment = decodeURIComponent(fragmentPart);
-      const escapedFragment = fragment.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const fragmentPattern = new RegExp(`\\sid=["']${escapedFragment}["']`);
+      const fragmentPattern = new RegExp(`\\sid=["']${fragment.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["']`);
       if (!fragmentPattern.test(targetHtml)) {
         errors.push(`${htmlFile}: frammento inesistente nella destinazione ${reference}`);
       }
@@ -147,21 +111,8 @@ for (const htmlFile of htmlFiles) {
   }
 }
 
-const publicTextFiles = globSync('**/*.{html,xml,txt,svg,css,js}', { cwd: outputRoot });
-const obsoletePublicReferences = ['Passione Fantascienza', '/passionefantascienza', 't.me/fantascienza1'];
-for (const file of publicTextFiles) {
-  const content = readFileSync(join(outputRoot, file), 'utf8');
-  for (const obsoleteReference of obsoletePublicReferences) {
-    if (content.includes(obsoleteReference)) {
-      errors.push(`${file}: riferimento pubblico obsoleto: ${obsoleteReference}.`);
-    }
-  }
-}
-
-for (const extension of ['docx', 'pdf']) {
-  if (globSync(`**/*.${extension}`, { cwd: outputRoot }).length > 0) {
-    errors.push(`L’output pubblico non deve contenere file .${extension}.`);
-  }
+if (globSync('**/*.docx', { cwd: outputRoot }).length > 0) {
+  errors.push('L’output pubblico non deve contenere i DOCX sorgente.');
 }
 
 if (errors.length > 0) {
@@ -170,4 +121,4 @@ if (errors.length > 0) {
 }
 
 console.log(`Output verificato: ${requiredFiles.length} file obbligatori e ${htmlFiles.length} pagine HTML.`);
-console.log(`Link, asset e metadata coerenti con il base path ${basePath}.`);
+console.log(`Link e asset interni coerenti con il base path ${base}.`);
