@@ -377,7 +377,7 @@ select {
 
 .section-heading h2,
 .community-pulse h2,
-.telegram-cta h2,
+.community-cta h2,
 .resources-intro h2,
 .community-note h2 {
   margin: 0;
@@ -743,7 +743,7 @@ select {
   color: var(--muted);
 }
 
-.telegram-cta {
+.community-cta {
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -759,7 +759,7 @@ select {
   box-shadow: var(--shadow);
 }
 
-.telegram-cta::before {
+.community-cta::before {
   position: absolute;
   top: -8rem;
   right: -7rem;
@@ -770,21 +770,21 @@ select {
   content: "";
 }
 
-.telegram-cta h2 {
+.community-cta h2 {
   max-width: 760px;
 }
 
-.telegram-cta p:not(.eyebrow) {
+.community-cta p:not(.eyebrow) {
   max-width: 700px;
   margin: 1.2rem 0 0;
   color: var(--muted);
 }
 
-.telegram-cta-compact {
+.community-cta-compact {
   padding: clamp(2rem, 5vw, 3.5rem);
 }
 
-.telegram-cta-compact h2 {
+.community-cta-compact h2 {
   font-size: clamp(2rem, 4vw, 3.5rem);
 }
 
@@ -1298,12 +1298,12 @@ select {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .telegram-cta {
+  .community-cta {
     grid-template-columns: 1fr;
     align-items: start;
   }
 
-  .telegram-cta .button {
+  .community-cta .button {
     justify-self: start;
   }
 }

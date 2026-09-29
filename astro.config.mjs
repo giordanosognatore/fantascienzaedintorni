@@ -1,9 +1,10 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { basePath, siteOrigin } from './site.config.mjs';
 
 export default defineConfig({
-  site: 'https://giordanosognatore.github.io',
-  base: '/passionefantascienza',
+  site: siteOrigin,
+  base: basePath,
   output: 'static',
   integrations: [sitemap()],
 });
